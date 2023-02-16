@@ -6,20 +6,22 @@ import (
 	"testing"
 	"time"
 
+	"github.com/gruntwork-io/terratest/modules/files"
 	http_helper "github.com/gruntwork-io/terratest/modules/http-helper"
 
-	"github.com/gruntwork-io/terratest/modules/files"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 )
 
 func Clean() {
-	defer os.Remove("./test-provider.tf")
 	defer os.Remove("./terraform.tfstate")
 	defer os.Remove("./terraform.tfstate.backup")
 	defer os.RemoveAll("./.terraform")
+	files.CopyFile("./provider.tf.backup", "./provider.tf")
+	defer os.Remove("./provider.tf.backup")
 }
 func Setup() {
-	files.CopyFile("./test/artifacts/provider.tf", "./test-provider.tf")
+	files.CopyFile("./provider.tf", "./provider.tf.backup")
+	files.CopyFile("./test/artifacts/provider.tf", "./provider.tf")
 }
 func TestLambdaModule(t *testing.T) {
 	t.Parallel()
