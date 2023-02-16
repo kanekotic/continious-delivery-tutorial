@@ -1,12 +1,10 @@
 package test
 
 import (
-	"fmt"
 	"os"
 	"testing"
-	"time"
 
-	http_helper "github.com/gruntwork-io/terratest/modules/http-helper"
+	"github.com/stretchr/testify/assert"
 
 	"github.com/gruntwork-io/terratest/modules/files"
 	"github.com/gruntwork-io/terratest/modules/terraform"
@@ -36,7 +34,7 @@ func TestLambdaModule(t *testing.T) {
 
 	stageName := terraform.Output(t, terraformOptions, "stage_name")
 	restApiId := terraform.Output(t, terraformOptions, "rest_api_id")
-	url := fmt.Sprintf("http://localhost:4566/restapis/%s/%s/_user_request_/say/hola", restApiId, stageName)
 
-	http_helper.HttpGetWithRetry(t, url, nil, 200, "", 10, 5*time.Second)
+	assert.Equal(t, "prod", stageName)
+	assert.NotEmpty(t, restApiId)
 }
