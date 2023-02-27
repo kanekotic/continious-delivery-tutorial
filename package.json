@@ -4,8 +4,7 @@
   "description": "mi proyecto de CD",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "jest"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -18,10 +17,7 @@
   },
   "homepage": "https://github.com/kanekotic/continious-delivery-tutorial#readme",
   "devDependencies": {
-    "jest": "^29.4.1",
-    "supertest": "^6.3.3"
   },
   "dependencies": {
-    "express": "^4.18.2"
   }
 }
