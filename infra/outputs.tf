@@ -5,3 +5,7 @@ output "rest_api_id" {
 output "stage_name" {
     value = aws_api_gateway_deployment.this.stage_name
 }
+
+output "url" {
+    value = aws_api_gateway_deployment.this.invoke_url
+}
