@@ -5,7 +5,7 @@ const router = Router()
 router.get('/', async (req, res) => {
     const extendhealth = await configcat.getValueAsync("extendhealth", false)
     if (extendhealth) {
-        throw "Not implemented"
+        res.send({general: true})
     }
     else{
         res.send()
