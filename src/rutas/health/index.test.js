@@ -1,7 +1,7 @@
 const request = require('supertest');
-const app = require('./server')();
+const app = require('../../server')();
 
-describe("", () => {
+describe("health route", () => {
     let server
     afterAll(async () => {
         server = app.listen(3000)
@@ -10,7 +10,7 @@ describe("", () => {
         server.close()
     })
     
-    it("/health should return 200", async() => {
+    it("should return 200 in the root path", async() => {
         await request(app).get('/health').expect(200, "")
     })
 })

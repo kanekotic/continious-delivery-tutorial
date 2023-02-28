@@ -1,9 +1,8 @@
 const express = require('express')
+const health = require("./rutas/health")
 
 module.exports = () => {
     const app = express()
-    app.get('/health', (req, res) => {
-        res.send()
-    })
+    app.use("/health", health)
     return app
 }
