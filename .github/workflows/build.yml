@@ -21,4 +21,4 @@ jobs:
       - run: npm install
       - run: npm test
       - run: npm run test-infra
-      - run: cd infra && terraform apply --auto-approve
+      - run: cd infra && terraform init && terraform apply --auto-approve
