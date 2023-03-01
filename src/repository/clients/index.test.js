@@ -72,4 +72,33 @@ describe("clients", () => {
         })
     })
 
+    describe("addClients", () => {
+        it('should add pepito as a test client', async() => {
+            await clients.addClients("pepito", true)
+            const params = {
+                TableName: 'lambda_db',
+                Key: {
+                    "IsTest": 1,
+                    "UserName": "pepito"
+                }
+            }
+            expect((await dynamoDocumentClient.get(params).promise()).Item).toEqual(params.Key)
+
+        })
+
+
+        it('should add pepita as a non test client', async() => {
+            await clients.addClients("pepita", false)
+            const params = {
+                TableName: 'lambda_db',
+                Key: {
+                    "IsTest": 0,
+                    "UserName": "pepita"
+                }
+            }
+            expect((await dynamoDocumentClient.get(params).promise()).Item).toEqual(params.Key)
+
+        })
+    })
+
 })

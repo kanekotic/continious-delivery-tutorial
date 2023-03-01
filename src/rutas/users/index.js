@@ -1,14 +1,13 @@
 const { Router } = require("express")
 const router = Router()
-
-let users = []
+const usersRepository = require("../../repository/clients")
 
 router.get('/', async (req, res) => {
-    res.send({ users })
+    res.send({users: usersRepository.getAllClients()})
 })
 
 router.post('/', async (req, res) => {
-    users = [...users, req.body]
+    usersRepository.addClients(req.body.name, req.header("X-Test") === 'true')
     res.send(201)
 })
 

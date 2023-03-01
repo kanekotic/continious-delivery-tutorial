@@ -7,7 +7,7 @@ const togglesMock = require("../../helpers/toggles");
 
 describe("health route", () => {
     let server
-    afterAll(async () => {
+    beforeAll(async () => {
         server = app.listen(3000)
     })
     afterAll(async () => {
