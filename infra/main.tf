@@ -15,6 +15,52 @@ data "archive_file" "zip" {
   excludes = [ "infra", ".github", "output", ".git" ]
 }
 
+resource "aws_dynamodb_table" "lambda_db" {
+  name           = "lambda_db"
+  billing_mode   = "PROVISIONED"
+  read_capacity  = 1
+  write_capacity = 1
+  hash_key       = "UserName"
+
+  attribute {
+    name = "UserName"
+    type = "S"
+  }
+
+  attribute {
+    name = "IsTest"
+    type = "N"
+  }
+
+  global_secondary_index {
+    name               = "IsTestIndex"
+    hash_key           = "IsTest"
+    write_capacity     = 1
+    read_capacity      = 1
+    projection_type    = "INCLUDE"
+    non_key_attributes = ["UserName"]
+  }
+
+}
+
+data "aws_iam_policy_document" "policy_dynamo" {
+  statement {
+    effect = "Allow"
+    actions = [
+     "dynamodb:BatchGetItem",
+     "dynamodb:GetItem",
+     "dynamodb:Query",
+     "dynamodb:Scan",
+     "dynamodb:BatchWriteItem",
+     "dynamodb:PutItem",
+     "dynamodb:UpdateItem"
+    ]
+    resources = [
+      aws_dynamodb_table.lambda_db.arn
+    ]
+  }
+}
+
 data "aws_iam_policy_document" "policy" {
   statement {
     sid    = ""
@@ -30,6 +76,13 @@ data "aws_iam_policy_document" "policy" {
 resource "aws_iam_role" "iam_for_lambda" {
   name               = "iam_for_lambda"
   assume_role_policy = data.aws_iam_policy_document.policy.json
+}
+
+resource "aws_iam_role_policy" "lambda_policy" {
+  name = "lambda_policy"
+  role = aws_iam_role.iam_for_lambda.id
+
+  policy = data.aws_iam_policy_document.policy_dynamo.json
 }
 
 resource "aws_lambda_function" "lambda" {
